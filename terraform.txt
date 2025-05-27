@@ -1,0 +1,89 @@
+Install Terraform on Ubuntu
+==========================
+# Update system packages:
+sudo apt update && sudo apt install -y gnupg software-properties-common curl
+
+# Add HashiCorp GPG key:
+curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+
+# Add the HashiCorp repository:
+echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
+sudo tee /etc/apt/sources.list.d/hashicorp.list
+
+# Update and install Terraform:
+sudo apt update
+sudo apt install terraform
+
+# Verify installation:
+terraform -v
+
+-----------------------------------------------------------------------
+
+Terraform + AWS
+===============
+To allow Terraform to create AWS resources, you need to set up your AWS credentials so Terraform 
+can authenticate with AWS.
+
+# Configure AWS CLI
+sudo apt install awscli -y
+
+# Get AWS Access Key & Secret Key
+Amazon Console --> IAM --> Users --> Click User --> Create access key
+
+# Configure AWS credentials:
+aws configure
+==> You’ll be prompted to enter:
+      AWS Access Key ID
+      AWS Secret Access Key
+      Default region (e.g., us-east-1)
+      Output format (e.g., json)
+
+-----------------------------------------------------------------------
+
+What is Terraform?
+=================
+Terraform is an open-source Infrastructure as Code (IaC) tool by HashiCorp. It allows you to define, 
+provision, and manage infrastructure using declarative configuration files. Terraform supports 
+multiple cloud providers (AWS, Azure, GCP, etc.) and on-premises infrastructure.
+
+Key Concepts:
+================
+Configuration Files:
+-------------------
+Written in HashiCorp Configuration Language (HCL) or JSON, these files define the desired 
+infrastructure state (e.g., .tf files).
+
+Providers: 
+---------
+Plugins that interact with APIs of cloud providers or services (e.g., AWS, Azure). You specify 
+the provider in your configuration.
+    
+Resources:
+----------
+Individual components of infrastructure (e.g., an EC2 instance, S3 bucket).
+    
+State: 
+------
+Terraform tracks the current state of your infrastructure in a state file (e.g., terraform.tfstate).
+This file maps your configuration to real-world resources.
+    
+Plan: 
+-----
+Terraform creates an execution plan showing what changes will be applied before modifying 
+infrastructure.
+    
+Apply: 
+------
+Executes the plan to create, update, or delete resources.
+    
+Modules: 
+--------
+Reusable, modular configurations for organizing code.
+
+Workflow:
+========
+1. Write configuration files (.tf).
+2. Run terraform init to initialize the provider and backend.
+3. Run terraform plan to preview changes.
+4. Run terraform apply to apply changes.
+5. Run terraform destroy to tear down resources (optional).
